@@ -1,0 +1,9 @@
+
+# A. This superstore database contains the information like Customers details, Product details, Order details, shipping details. 
+# Five tables are used to capture all the information, and tables are dependent on other tables. This database is relational database 
+# as relations exist in tables. Tables whihch are used in this database are :
+# cust_dimen(contains the informaton related to individual cutomer like Customer Name, Province, Customer ID etc), 
+# prod_dimen(contains the information related to individual product like Product category, product sub category and prodcut id),
+# market_fact(contains the information related to individual order like order id, prodcut id, customer id, profit, order quantity, shiping information etc),
+# order_dimen(contains the information related to individual order like when the order was placed, priority of order, order id etc), 
+# shipping_dimen(contains the information rerlated to shipping of products like order id, mode of shipping, shipping date, shipping id etc).
