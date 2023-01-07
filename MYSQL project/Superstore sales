@@ -1,0 +1,112 @@
+SQL project in a MySQL database for the Superstore Sales Analysis Database:
+
+Create a database called "superstore_sales" in MySQL.
+
+Create the following tables in the database:
+
+Customers: stores customer information such as name, address, and loyalty status
+Orders: stores order information such as order date, total amount, and customer ID
+Products: stores product information such as name, category, and price
+Order_items: stores details about the items in each order, including the product ID, quantity, and price
+Import data into the tables using a CSV file or by manually entering the data.
+
+
+
+
+
+SQL queries to answer the following questions:
+
+
+
+1.How many customers are there in the database?
+2.What are the top 5 products by sales revenue?
+3.How many orders were placed in the month of January 2021?
+4.What is the average order total for customers in the "gold" loyalty program?
+5.How many products are in the "electronics" category?
+6.What is the total sales revenue for the month of February 2021?
+7.How many customers made at least one order in the year 2020?
+8.What is the most popular product among customers aged 25-34?
+9.How many orders were shipped to the state of California?
+10.What is the average time between a customer's first and second order?
+
+
+
+
+How many customers are there in the database?
+SELECT COUNT(*) FROM Customers;
+
+
+What are the top 5 products by sales revenue?
+SELECT Products.name, SUM(Order_items.quantity * Order_items.price) AS revenue
+FROM Products
+JOIN Order_items ON Products.product_id = Order_items.product_id
+GROUP BY Products.product_id
+ORDER BY revenue DESC
+LIMIT 5;
+
+
+
+How many orders were placed in the month of January 2021?
+SELECT COUNT(*)
+FROM Orders
+WHERE MONTH(order_date) = 1 AND YEAR(order_date) = 2021;
+
+
+What is the average order total for customers in the "gold" loyalty program?
+SELECT AVG(total_amount)
+FROM Orders
+WHERE customer_id IN (SELECT customer_id FROM Customers WHERE loyalty_status = 'gold');
+
+
+How many products are in the "electronics" category?
+SELECT COUNT(*)
+FROM Products
+WHERE category = 'electronics';
+
+
+What is the total sales revenue for the month of February 2021?
+SELECT SUM(Order_items.quantity * Order_items.price)
+FROM Orders
+JOIN Order_items ON Orders.order_id = Order_items.order_id
+WHERE MONTH(order_date) = 2 AND YEAR(order_date) = 2021;
+
+
+How many customers made at least one order in the year 2020?
+SELECT COUNT(DISTINCT customer_id)
+FROM Orders
+WHERE YEAR(order_date) = 2020;
+
+
+What is the most popular product among customers aged 25-34?
+SELECT Products.name, COUNT(Order_items.product_id) AS popularity
+FROM Products
+JOIN Order_items ON Products.product_id = Order_items.product_id
+JOIN Orders ON Order_items.order_id = Orders.order_id
+JOIN Customers ON Orders.customer_id = Customers.customer_id
+WHERE Customers.age BETWEEN 25 AND 34
+GROUP BY Products.product_id
+ORDER BY popularity DESC
+limit 1;
+
+
+How many orders were shipped to the state of California?
+SELECT COUNT(*)
+FROM Orders
+WHERE shipping_state = 'California';
+
+
+What is the average time between a customer's first and second order?
+SELECT AVG(TIMESTAMPDIFF(DAY, first_order_date, second_order_date))
+FROM (
+  SELECT c.customer_id, MIN(o.order_date) AS first_order_date,
+  (SELECT MIN(order_date) FROM Orders WHERE customer_id = c.customer_id AND order_date > MIN(o.order_date)) AS second_order_date
+  FROM Customers c
+  JOIN Orders o ON c.customer_id = o.customer_id
+  GROUP BY c.customer_id
+  HAVING COUNT(*) > 1
+) t;
+
+
+
+
+
