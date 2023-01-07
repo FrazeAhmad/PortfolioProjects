@@ -4,6 +4,44 @@ Create a database called "superstore_sales" in MySQL.
 
 Create the following tables in the database:
 
+
+CREATE DATABASE superstore_sales;
+
+USE superstore_sales;
+
+CREATE TABLE Customers (
+  customer_id INTEGER PRIMARY KEY,
+  name VARCHAR(255),
+  address VARCHAR(255),
+  loyalty_status VARCHAR(255)
+);
+
+CREATE TABLE Orders (
+  order_id INTEGER PRIMARY KEY,
+  order_date DATE,
+  total_amount DECIMAL(10,2),
+  customer_id INTEGER,
+  FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)
+);
+
+CREATE TABLE Products (
+  product_id INTEGER PRIMARY KEY,
+  name VARCHAR(255),
+  category VARCHAR(255),
+  price DECIMAL(10,2)
+);
+
+CREATE TABLE Order_items (
+  order_id INTEGER,
+  product_id INTEGER,
+  quantity INTEGER,
+  price DECIMAL(10,2),
+  PRIMARY KEY (order_id, product_id),
+  FOREIGN KEY (order_id) REFERENCES Orders(order_id),
+  FOREIGN KEY (product_id) REFERENCES Products(product_id)
+);
+
+
 Customers: stores customer information such as name, address, and loyalty status
 Orders: stores order information such as order date, total amount, and customer ID
 Products: stores product information such as name, category, and price
